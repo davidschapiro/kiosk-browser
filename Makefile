@@ -6,7 +6,7 @@
 	cp -r src build
 	cp -r DEBIAN build
 	V=$$(git rev-list HEAD | wc -l) ; sed -i -e "s/Version:.*/Version: $$V/" build/DEBIAN/control
-	git log | gzip -9 >build/usr/share/doc/kiosk-browser/changelog.gz
+	git log | gzip -n9 >build/usr/share/doc/kiosk-browser/changelog.gz
 	chmod -R g-w build
 	chmod 0440 build/etc/sudoers.d/kiosk-browser
 	/usr/sbin/visudo -c -f build/etc/sudoers.d/kiosk-browser
