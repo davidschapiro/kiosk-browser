@@ -37,7 +37,7 @@ done
 
 # show debug info for 60 seconds as overlay
 {
-    echo "Welcome to the Kiosk Browser (http://github.com/ImmobilienScout24/kiosk-browser)"
+    echo "Welcome to the Kiosk Browser (http://github.com/schlomo/kiosk-browser)"
     echo
     echo "This is $(uname -n)"
     ip a
@@ -73,7 +73,7 @@ fi
 
 if [[ ! "$KIOSK_BROWSER_START_PAGE" ]] ; then
     # point to our github page as built-in default
-    KIOSK_BROWSER_START_PAGE=https://github.com/ImmobilienScout24/kiosk-browser
+    KIOSK_BROWSER_START_PAGE=https://github.com/schlomo/kiosk-browser
 fi
 
 KIOSK_BROWSER_WATCHDOG_CHECK_INTERVAL="${KIOSK_BROWSER_WATCHDOG_CHECK_INTERVAL:-313}"
@@ -124,10 +124,10 @@ if (( KIOSK_BROWSER_WATCHDOG_TIMEOUT > 0 )) ; then
 
         LASTHASH=""
         LASTCHANGED="$SECONDS"
-        while sleep $KIOSK_BROWSER_WATCHDOG_CHECK_INTERVAL & wait $! ; do 
+        while sleep $KIOSK_BROWSER_WATCHDOG_CHECK_INTERVAL & wait $! ; do
             HASH=$(nice import -display :0 -window root -monochrome jpg:- | nice identify -format '%#' -)
             #declare -p HASH LASTHASH LASTCHANGED SECONDS
-            if [[ "$HASH" = "$LASTHASH" ]] ; then 
+            if [[ "$HASH" = "$LASTHASH" ]] ; then
                 if (( SECONDS > LASTCHANGED + KIOSK_BROWSER_WATCHDOG_TIMEOUT )) ; then
                 sudo /sbin/reboot
                 break

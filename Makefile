@@ -1,28 +1,58 @@
-.PHONY: info repo clean
+.PHONY: all build test install clean commit-release release deb repo
+PACKAGE=kiosk-browser
+SHELL=bash
+VERSION := $(shell git rev-list HEAD --count --no-merges)
+GIT_STATUS := $(shell git status --porcelain)
 
-*.deb:	check_status clean
-	rm -Rf build
-	mkdir -p out
-	cp -r src build
-	cp -r DEBIAN build
-	V=$$(git rev-list HEAD | wc -l) ; sed -i -e "s/Version:.*/Version: $$V/" build/DEBIAN/control
-	git log | gzip -n9 >build/usr/share/doc/kiosk-browser/changelog.gz
-	chmod -R g-w build
-	chmod 0440 build/etc/sudoers.d/kiosk-browser
-	/usr/sbin/visudo -c -f build/etc/sudoers.d/kiosk-browser
-	fakeroot dpkg -b build out
-	rm -Rf build
-	lintian --suppress-tags postrm-contains-additional-updaterc.d-calls -i out/*.deb
 
-info: out/*.deb
-	dpkg-deb -I out/*.deb
-	dpkg-deb -c out/*.deb
+all: build
 
-repo: out/*.deb
-	../putinrepo.sh out/*.deb
+build:
+	@echo No build required
+
+commit-release:
+ifneq ($(GIT_STATUS),)
+	$(error Please commit all changes before releasing. $(shell git status 1>&2))
+endif
+	gbp dch --full --release --new-version=$(VERSION) --distribution stable --auto --git-author --commit
+	git push
+
+release: commit-release deb
+	@latest_tag=$$(git describe --tags `git rev-list --tags --max-count=1`); \
+	comparison="$$latest_tag..HEAD"; \
+	if [ -z "$$latest_tag" ]; then comparison=""; fi; \
+	changelog=$$(git log $$comparison --oneline --no-merges --reverse); \
+	github-release schlomo/$(PACKAGE) v$(VERSION) "$$(git rev-parse --abbrev-ref HEAD)" "**Changelog**<br/>$$changelog" 'out/*.deb'; \
+	git pull
+	dput ppa:sschapiro/ubuntu/ppa/xenial out/$(PACKAGE)_*_source.changes
+
+test:
+	./runtests.sh
+
+install:
+	install -m 0644 00-disable-inputs.conf -D -t $(DESTDIR)/usr/share/X11/xorg.conf.d
+	install -m 0755 kiosk-browser-control -D -t $(DESTDIR)/usr/bin
+	install -m 0644 openbox-rc.xml -D -t $(DESTDIR)/usr/share/$(PACKAGE)
+	install -m 0644 sudoers -D $(DESTDIR)/etc/sudoers.d/$(PACKAGE)
+	install -m 0644 XOsview -D -t $(DESTDIR)/usr/lib/X11/app-defaults
+	install -m 0755 xsession.sh -D -t $(DESTDIR)/usr/share/$(PACKAGE)
 
 clean:
-	rm -fr out build
+	rm -Rf debian/$(PACKAGE) debian/*debhelper* debian/*substvars debian/files out/*
 
-check_status:
-	@git diff-index --quiet HEAD -- || { echo ; git status -s ; echo -e "\nERROR: All changes must be comitted!\n" ; false ; }
+deb: clean
+ifneq ($(MAKECMDGOALS), release)
+	$(eval DEBUILD_ARGS := -us -uc)
+endif
+	debuild $(DEBUILD_ARGS) -i -b --lintian-opts --profile debian
+	debuild $(DEBUILD_ARGS) -i -S --lintian-opts --profile debian
+	mkdir -p out
+	mv ../$(PACKAGE)*.{xz,dsc,deb,build,changes} out/
+	cd out ; apt-ftparchive packages . >Packages
+	dpkg -I out/*.deb
+	dpkg -c out/*.deb
+
+repo:
+	../putinrepo.sh out/*.deb
+
+# vim: set ts=4 sw=4 tw=0 noet :

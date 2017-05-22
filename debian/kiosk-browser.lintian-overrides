@@ -1,0 +1,2 @@
+kiosk-browser: binary-without-manpage usr/bin/kiosk-browser-control
+kiosk-browser: postrm-contains-additional-updaterc.d-calls etc/init.d/nodm

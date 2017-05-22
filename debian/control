@@ -1,0 +1,20 @@
+Source: kiosk-browser
+Maintainer: Schlomo Schapiro <schlomo+kiosk-browser@schapiro.org>
+Section: web
+Priority: optional
+Standards-Version: 3.9.8
+Homepage: https://github.com/schlomo/kiosk-browser
+Build-Depends: debhelper (>= 9), git-buildpackage, libxml2-utils, sudo, bash (>= 4)
+
+Package: kiosk-browser
+Architecture: all
+Pre-Depends: nodm
+Depends: ${misc:Depends}, xserver-xorg, chromium | chromium-browser, epiphany-browser, uzbl, x11-xserver-utils, xdotool, x11-apps, sudo, imagemagick, debconf, xtightvncviewer, xosd-bin, xosview, openbox
+Description: Web Browser for non-interactive use like a web kiosk
+ Setup system to work as a kiosk browser, showing only a full-screen browser.
+ .
+ Configuration options in /etc/default/kiosk-browser
+   KIOSK_BROWSER_START_PAGE sets the start page
+ Also add your own customization to that file, e.g. xrandr calls.
+ .
+ See project homepage for full list of config options.

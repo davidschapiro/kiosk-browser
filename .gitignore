@@ -1,2 +1,11 @@
 build/
 out/
+*.log
+debian/kiosk-browser
+debian/*debhelper*
+debian/*substvars
+debian/files
+.deps
+.vagrant
+
+
