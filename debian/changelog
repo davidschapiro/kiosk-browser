@@ -1,5 +1,7 @@
 kiosk-browser (100) stable; urgency=medium
 
+  * Migrate to work with systemctl (based on work from https://github.com/MartinLinSup/kiosk-browser)
+  * Include Vagrantfile to test on Ubuntu and on Debian
   * Resume development, see GitHub for older changes
 
- -- Schlomo Schapiro <schlomo@schapiro.org>  Mon, 22 May 2017 10:10:10 +0200
+ -- Schlomo Schapiro <schlomo.schapiro@zalando.de>  Mon, 22 May 2017 16:53:18 +0200
