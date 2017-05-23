@@ -14,6 +14,7 @@ $script = <<SCRIPT
 set -ex
 mount | grep vbox
 echo "deb [ trusted=yes ] copy:/packages /" >/etc/apt/sources.list.d/vagrant.list
+export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get -y install kiosk-browser
 SCRIPT
