@@ -158,6 +158,17 @@ And next to it another file with the HTML code, named `dashboard.html`:
 
 Finally, adjust `KIOSK_BROWSER_START_PAGE` in `/etc/default/kiosk-browser` to point to this `dashboard.html` and you are done.
 
+Prevent loading
+---------------
+
+As `kiosk-browser` disables mouse and keyboard it can be nearly impossible to fix network connectivity problems. If you want to be able to prevent the loading of the graphical environment create `/etc/systemd/system/nodm.service.d/keycheck.conf` with the this content:
+```
+[Service]
+ExecStartPre=/bin/sh -c "timeout 1 thd --dump /dev/input/event* | grep -q _ && exit 1 || exit 0"
+
+```
+As a result pressing any key or mouse button during system startup will prevent the start of `nodm` and the graphical environment. This trick requires the `triggerhappy` package which is installed by default on Raspbian.
+
 Hacking
 =======
 
