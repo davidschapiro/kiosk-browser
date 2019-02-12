@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 9), git-buildpackage, libxml2-utils, sudo, bash (>=
 Package: kiosk-browser
 Architecture: all
 Pre-Depends: nodm
-Depends: ${misc:Depends}, xserver-xorg, chromium | chromium-browser, epiphany-browser, uzbl, x11-xserver-utils, xdotool, x11-apps, sudo, imagemagick, debconf, xtightvncviewer, xosd-bin, xosview, openbox
+Depends: ${misc:Depends}, xserver-xorg, chromium | chromium-browser, epiphany-browser, x11-xserver-utils, xdotool, x11-apps, sudo, imagemagick, debconf, xtightvncviewer, xosd-bin, xosview, openbox
 Description: Web Browser for non-interactive use like a web kiosk
  Setup system to work as a kiosk browser, showing only a full-screen browser.
  .
