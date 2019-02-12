@@ -1,3 +1,10 @@
+kiosk-browser (102) stable; urgency=medium
+
+  * handle buildinfo
+  * Remove uzbl in readme
+
+ -- Schlomo Schapiro <schlomo@schapiro.org>  Tue, 12 Feb 2019 21:09:21 +0100
+
 kiosk-browser (99) stable; urgency=medium
 
   * Remove uzbl to support Ubuntu 18.10
