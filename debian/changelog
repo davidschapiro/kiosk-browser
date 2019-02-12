@@ -1,3 +1,9 @@
+kiosk-browser (99) stable; urgency=medium
+
+  * Remove uzbl to support Ubuntu 18.10
+
+ -- Schlomo Schapiro <schlomo@schapiro.org>  Tue, 12 Feb 2019 21:01:11 +0100
+
 kiosk-browser (21) stable; urgency=medium
 
   * Prevent debconf questions
