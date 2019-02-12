@@ -28,7 +28,8 @@ Building
 Installation
 ============
 
-1. Install the .deb package you build just now from the `out` directory
+1. Install the .deb package you build just now from the `out` directory. Alternatively you can download it from [releases](releases) or add my [PPA](https://launchpad.net/~sschapiro/+archive/ubuntu/ppa) to your system and install it from there.
+1. Configure SSH access so that you don't lock yourself out of your computer
 1. Create `/etc/default/kiosk-browser` and set `KIOSK_BROWSER_START_PAGE`
 1. Reboot the system
 
