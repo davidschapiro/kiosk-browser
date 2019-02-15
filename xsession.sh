@@ -40,10 +40,18 @@ done
     echo "Welcome to the Kiosk Browser (http://github.com/schlomo/kiosk-browser)"
     echo
     echo "This is $(uname -n)"
-    ip a
-    ip route
-    cat /etc/resolv.conf
-    perl -e '$/ = undef; $d=<>; $d =~ m/.*(lease {.*?})$/s ; print $1' $(ps ax | grep dhclient | sed -ne "s/.* \(\/[^ ]\+\.lease[s]\?\).*/\1/p") <<<""
+    echo
+    if type -p networkctl &>/dev/null ; then
+        networkctl status
+    else
+        ip a | grep -E 'UP|inet'
+        echo
+        ip route
+        echo
+        sed -e '/^#/d;/^$/d' /etc/resolv.conf
+    fi
+    echo
+    perl -e '$/ = undef; $d=<>; $d =~ m/.*(lease \{.*?\})$/s ; print $1' $(ps ax | grep dhclient | sed -ne "s/.* \(\/[^ ]\+\.lease[s]\?\).*/\1/p") <<<""
     echo
     echo "This message will self-destruct in 60 seconds"
 } | osd_cat --pos bottom --align left --colour green --outline 2 --font 10x20 --lines 50 --delay 60 &
