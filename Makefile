@@ -24,7 +24,7 @@ release: commit-release deb
 	changelog=$$(git log $$comparison --oneline --no-merges --reverse); \
 	github-release schlomo/$(PACKAGE) v$(VERSION) "$$(git rev-parse --abbrev-ref HEAD)" "**Changelog**<br/>$$changelog" 'out/*.deb'; \
 	git pull
-	dput ppa:sschapiro/ubuntu/ppa/xenial out/$(PACKAGE)_*_source.changes
+	dput ppa:sschapiro/ubuntu/ppa/bionic out/$(PACKAGE)_*_source.changes
 
 test:
 	./runtests.sh
@@ -36,6 +36,7 @@ install:
 	install -m 0644 sudoers -D $(DESTDIR)/etc/sudoers.d/$(PACKAGE)
 	install -m 0644 XOsview -D -t $(DESTDIR)/usr/lib/X11/app-defaults
 	install -m 0755 xsession.sh -D -t $(DESTDIR)/usr/share/$(PACKAGE)
+	install -m 0644 kiosk-browser.json -D -t $(DESTDIR)/etc/chromium-browser/policies/recommended
 
 clean:
 	rm -Rf debian/$(PACKAGE) debian/*debhelper* debian/*substvars debian/files out/*

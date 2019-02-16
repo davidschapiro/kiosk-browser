@@ -54,7 +54,7 @@ done
     perl -e '$/ = undef; $d=<>; $d =~ m/.*(lease \{.*?\})$/s ; print $1' $(ps ax | grep dhclient | sed -ne "s/.* \(\/[^ ]\+\.lease[s]\?\).*/\1/p") <<<""
     echo
     echo "This message will self-destruct in 60 seconds"
-} | osd_cat --pos bottom --align left --colour green --outline 2 --font 10x20 --lines 50 --delay 60 &
+} | sed -e 's/●/ /g' | osd_cat --offset 10 --indent 10 --colour green --outline 2 --font 10x20 --lines 50 --delay 60 &
 
 disown -a # forget about running osd_cat, it will terminate itself anyway
 
@@ -202,7 +202,7 @@ while sleep 5 & wait $!; do
             wait $!
             xdotool search --class uzbl-$c windowmove --sync $port_x 0
         else
-            $CHROME --user-data-dir=$BROWSER_PROFILE_DIR "${KIOSK_BROWSER_OPTIONS[@]}" --use-fake-ui-for-media-stream --disable-translate --no-first-run --start-fullscreen --app="$URL" &
+            $CHROME --user-data-dir=$BROWSER_PROFILE_DIR "${KIOSK_BROWSER_OPTIONS[@]}" --use-fake-ui-for-media-stream --no-first-run --start-fullscreen --app="$URL" &
             PID=$!
 
             # move new window to the current screen. We identify the window by the --user-data-dir option which appears in the window class name :-)
